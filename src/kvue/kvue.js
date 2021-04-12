@@ -6,15 +6,27 @@ function observe(obj) {
 
 function defineReactive(obj, key, val) {
   observe(val);
+  const dep = new Dep();
   Object.defineProperty(obj, key, {
     get() {
+      // 依赖收集
+      Dep.target && dep.addWatchers(Dep.target);
+
       console.log('get', key, val);
+
       return val;
     },
     set(newVal) {
       if (newVal !== val) {
         console.log('set', key, val);
+
+        // 传入新值v可能还是对象
+        observe(newVal);
+
         val = newVal;
+
+        // 通知更新
+        dep.notify();
       }
     },
   });
@@ -22,7 +34,7 @@ function defineReactive(obj, key, val) {
 
 function proxy(vm) {
   Object.keys(vm.$data).forEach(key => {
-    Object.defineProperties(vm, key, {
+    Object.defineProperty(vm, key, {
       get() {
         return vm.$data[key];
       },
@@ -40,7 +52,7 @@ class KVue {
     this.$data = options.data;
 
     // 响应式处理
-    this.observe(this.$data);
+    observe(this.$data);
 
     // 代理$data到vue实例
     proxy(this);
@@ -78,11 +90,12 @@ class Compile {
     Array.from(childNodes).forEach(node => {
       if (this.isElement(node)) {
         this.compileElement(node);
+
+        if (node.childNodes && node.childNodes.length > 0) {
+          this.compile(node);
+        }
       } else if (this.isInterpolation(node)) {
         this.compileText(node);
-      }
-      if (node.childNodes && node.childNodes.length > 0) {
-        this.compile(node);
       }
     });
   }
@@ -92,6 +105,7 @@ class Compile {
   }
 
   isInterpolation(node) {
+    console.log(node);
     return node.nodeType === 3 && /\{\{(.*)\}\}/.test(node.textContent);
   }
 
@@ -145,11 +159,30 @@ class Watcher {
     this.vm = vm;
     this.key = key;
     this.updaterFn = updaterFn;
-    this.update();
+
+    Dep.target = this;
+    this.vm[this.key];
+    Dep.target = null;
   }
 
   update() {
     this.updaterFn.call(this.vm, this.vm[this.key]);
+  }
+}
+
+class Dep {
+  constructor() {
+    this.watchers = [];
+  }
+
+  addWatchers(watcher) {
+    this.watchers.push(watcher);
+  }
+
+  notify() {
+    this.watchers.forEach(watcher => {
+      watcher.update();
+    });
   }
 }
 

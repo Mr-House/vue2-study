@@ -1,5 +1,6 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <div id="app">
+  <p>{{counter}}</p>
   <p>{{now}}</p>
 </div>
 <script src="./kvue.js"></script>
@@ -7,10 +8,12 @@
   const vm = new KVue({
     el: '#app',
     data: {
+      counter: 1,
       now: new Date().toLocaleString()
     }
   })
   setInterval(() => {
-    vm.$data.now = new Date().toLocaleString()
+    vm.counter++
+    vm.now = new Date().toLocaleString()
   }, 1000)
 </script>
