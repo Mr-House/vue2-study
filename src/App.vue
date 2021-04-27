@@ -4,13 +4,18 @@
     <router-link to="/about" class="menu">About</router-link>
     <router-view></router-view>
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+    <form-test></form-test>
   </div>
 </template>
 
 <script>
+import FormTest from './ElForm/FormTest';
 export default {
-  name: 'App'
-}
+  name: 'App',
+  components: {
+    FormTest,
+  },
+};
 </script>
 
 <style>
