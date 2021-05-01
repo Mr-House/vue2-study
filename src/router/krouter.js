@@ -6,7 +6,6 @@ export default class VueRouter {
     this.$options.routes.forEach(route => {
       this.routeMap[route.path] = route
     })
-    console.log(window.location)
     this.current = window.location.hash.slice(1) || '/'
     // 当前地址匹配到的路由数组matched, matched应该是响应式的，这样在路由变化的时候才会触发route-view重新渲染
     Vue.util.defineReactive(this, 'matched', [])

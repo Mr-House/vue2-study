@@ -186,4 +186,4 @@ class Dep {
   }
 }
 
-// console.log(KVue);
+console.log(KVue);

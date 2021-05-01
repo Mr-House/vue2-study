@@ -5,15 +5,18 @@
     <router-view></router-view>
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <form-test></form-test>
+    <svg-test></svg-test>
   </div>
 </template>
 
 <script>
 import FormTest from './ElForm/FormTest';
+import SvgTest from './icons/SvgTest'
 export default {
   name: 'App',
   components: {
     FormTest,
+    SvgTest
   },
 };
 </script>
