@@ -1,12 +1,19 @@
-import Vue from 'vue';
-import App from './App.vue';
-import router from './router/router';
-import store from './store/store';
+import Vue from 'vue'
+import App from './App.vue'
+import createRouter from './router/router'
+import createStore from './store/store'
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
-new Vue({
-  router,
-  store,
-  render: h => h(App),
-}).$mount('#app');
+// 返回vue实例工厂函数
+export default function createApp(context) {
+  const router = createRouter()
+  const store = createStore()
+  const app = new Vue({
+    router,
+    context,
+    store,
+    render: h => h(App)
+  })
+  return { app, router }
+}
