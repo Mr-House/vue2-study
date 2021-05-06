@@ -12,6 +12,10 @@ export default function createStore() {
       doubleCounter: state => state.counter * 2
     },
     mutations: {
+      init(state, value) {
+        console.log(state.counter)
+        state.counter = value
+      },
       add(state) {
         state.counter++
       },
@@ -27,6 +31,14 @@ export default function createStore() {
       },
       sub({ commit }) {
         commit('sub')
+      },
+      getCount({ commit }) {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            commit('init', Math.random() * 100000)
+            resolve()
+          }, 1000)
+        })
       }
     }
   })

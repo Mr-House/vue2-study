@@ -22,7 +22,11 @@
 </template>
 
 <script>
-export default {}
+export default {
+  asyncData({store}) {
+    return store.dispatch('getCount')
+  }
+}
 </script>
 
 <style></style>
